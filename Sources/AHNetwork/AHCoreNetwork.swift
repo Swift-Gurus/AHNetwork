@@ -15,22 +15,35 @@ protocol AHCoreNetwork {
     
     @available(OSX 10.15, *)
     @available(iOS 13.0, *)
-    func send(request: IRequest) -> AnyPublisher<AHNetworkResponse, URLError>
+    func send(request: IRequest) -> AnyPublisher<AHNetworkResponse, Error>
+    
+    @available(OSX 10.15, *)
+    @available(iOS 13.0, *)
+    func receiveSocketData(request: IRequest) -> AnyPublisher<Data, Error>
+    @available(OSX 10.15, *)
+    @available(iOS 13.0, *)
+    func receiveSocketMessage(request: IRequest) -> AnyPublisher<String, Error>
 }
 
 @available(OSX 10.15, *)
 final class AHCoreNetworkImp: AHCoreNetwork {
- 
     
-    private let provider: INetworkProvider
 
-    init(networkProvider: INetworkProvider) {
+    private let provider: INetworkProvider
+    private let socketProvider: SocketProvider
+    init(networkProvider: INetworkProvider, socketProvider: SocketProvider) {
         provider = networkProvider
+        self.socketProvider = socketProvider
     }
 
+    
+    
     @available(iOS 13.0, *)
-    func send(request: IRequest) -> AnyPublisher<AHNetworkResponse, URLError> {
+    func send(request: IRequest) -> AnyPublisher<AHNetworkResponse, Error> {
         return provider.send(request)
+            .mapError { $0 }
+            .tryMap(statusCheck)
+            .eraseToAnyPublisher()
         
      }
     /// Sends IRequest
@@ -58,13 +71,23 @@ final class AHCoreNetworkImp: AHCoreNetwork {
                                                  .onNone { completion(.success(response.data)) }
     }
     
-    
-
-    private func convertToError(networkResponse: AHNetworkResponse) -> CoreNetworkError? {
-        guard networkResponse.statusCode != 200  else { return nil }
-        return .responseError(networkResponse)
+    func receiveSocketData(request: IRequest) -> AnyPublisher<Data, Error> {
+        socketProvider.receiveSocketData(request: request)
     }
- 
+    
+    func receiveSocketMessage(request: IRequest) -> AnyPublisher<String, Error> {
+        socketProvider.receiveSocketMessage(request: request)
+    }
+}
+
+private func statusCheck(networkResponse: AHNetworkResponse) throws -> AHNetworkResponse  {
+    guard networkResponse.statusCode != 200  else { return networkResponse }
+    throw CoreNetworkError.responseError(networkResponse)
+}
+
+private func convertToError(networkResponse: AHNetworkResponse) -> CoreNetworkError? {
+    guard networkResponse.statusCode != 200  else { return nil }
+    return .responseError(networkResponse)
 }
 
 public enum CoreNetworkError: LocalizedError {

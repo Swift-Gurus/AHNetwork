@@ -22,8 +22,12 @@ public class GenericNetworkLayerBuilder {
         return AHNetworkProvider(session: urlSession)
     }
     
+    private var socketProvider: SocketProvider {
+        WebTaskNode(session: urlSession)
+    }
+    
     private var coreNetwork: AHCoreNetwork {
-        return AHCoreNetworkImp(networkProvider: provider)
+        return AHCoreNetworkImp(networkProvider: provider, socketProvider: socketProvider)
     }
     
     public func getNetworkLayer<F: NetworkRequestFactory>(using factory: F) -> GenericNetworkLayer<F> {
