@@ -22,12 +22,17 @@ public class GenericNetworkLayerBuilder {
         return AHNetworkProvider(session: urlSession)
     }
     
+    @available(iOS 13.0, *)
     private var socketProvider: SocketProvider {
         WebTaskNode(session: urlSession)
     }
     
     private var coreNetwork: AHCoreNetwork {
-        return AHCoreNetworkImp(networkProvider: provider, socketProvider: socketProvider)
+        if #available(iOS 13.0, *) {
+            return AHCoreNetworkImp(networkProvider: provider, socketProvider: socketProvider)
+        } else {
+            return AHCoreNetworkImp(networkProvider: provider)
+        }
     }
     
     public func getNetworkLayer<F: NetworkRequestFactory>(using factory: F) -> GenericNetworkLayer<F> {

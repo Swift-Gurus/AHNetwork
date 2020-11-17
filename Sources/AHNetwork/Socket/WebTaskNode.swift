@@ -81,6 +81,7 @@ final class WebTaskNode: SocketProvider {
 }
 
 
+@available(iOS 13.0, *)
 @available(OSX 10.15, *)
 private func extractData(message: URLSessionWebSocketTask.Message) -> Data? {
     if case let .data(data) = message {
@@ -89,6 +90,7 @@ private func extractData(message: URLSessionWebSocketTask.Message) -> Data? {
     return nil
 }
 
+@available(iOS 13.0, *)
 @available(OSX 10.15, *)
 private func extractString(message: URLSessionWebSocketTask.Message) -> String? {
     if case let .string(msg) = message {
@@ -147,7 +149,7 @@ extension URLSession {
     }
 }
 
-
+@available(iOS 13.0, *)
 @available(OSX 10.15, *)
 extension URLSessionWebSocketTask {
     
@@ -176,7 +178,7 @@ extension URLSessionWebSocketTask {
     }
 }
 
-
+@available(iOS 13.0, *)
 @available(OSX 10.15, *)
 extension URLSessionWebSocketTask {
     

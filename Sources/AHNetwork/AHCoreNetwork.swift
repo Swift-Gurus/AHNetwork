@@ -30,13 +30,18 @@ final class AHCoreNetworkImp: AHCoreNetwork {
     
 
     private let provider: INetworkProvider
-    private let socketProvider: SocketProvider
+    private let socketProvider: SocketProvider!
+    
+    @available(iOS 13.0, *)
     init(networkProvider: INetworkProvider, socketProvider: SocketProvider) {
         provider = networkProvider
         self.socketProvider = socketProvider
     }
-
     
+    init(networkProvider: INetworkProvider) {
+        provider = networkProvider
+        socketProvider = nil
+    }
     
     @available(iOS 13.0, *)
     func send(request: IRequest) -> AnyPublisher<AHNetworkResponse, Error> {
@@ -71,10 +76,12 @@ final class AHCoreNetworkImp: AHCoreNetwork {
                                                  .onNone { completion(.success(response.data)) }
     }
     
+    @available(iOS 13.0, *)
     func receiveSocketData(request: IRequest) -> AnyPublisher<Data, Error> {
         socketProvider.receiveSocketData(request: request)
     }
     
+    @available(iOS 13.0, *)
     func receiveSocketMessage(request: IRequest) -> AnyPublisher<String, Error> {
         socketProvider.receiveSocketMessage(request: request)
     }
@@ -105,5 +112,32 @@ public enum CoreNetworkError: LocalizedError {
         }
 
         return msg
+    }
+}
+
+@available(iOS 13.0, *)
+struct SocketPlaceHolderForLowerVersions: SocketProvider {
+    func receiveSocketData(request: IRequest) -> AnyPublisher<Data, Error> {
+        errorFuture()
+    }
+    
+    func receiveSocketMessage(request: IRequest) -> AnyPublisher<String, Error> {
+        errorFuture()
+    }
+    
+    func closeSocket(request: IRequest) {
+        
+    }
+    
+    func errorFuture<T>() -> AnyPublisher<T, Error> {
+        Future { (completion) in
+            completion(.failure(UnsupportedError()))
+        }.eraseToAnyPublisher()
+    }
+    
+    
+    
+    struct UnsupportedError: LocalizedError {
+        var errorDescription: String? = "Unsupported"
     }
 }
