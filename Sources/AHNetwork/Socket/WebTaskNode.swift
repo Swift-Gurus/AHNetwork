@@ -11,7 +11,7 @@ final class WebTaskNode: SocketProvider {
     
     private let session: URLSession
     fileprivate let adapter: IRequestAdapter = AHRequestAdapter()
-    private var openSockets: [String: URLSessionWebSocketTask.WebSocketSubscription] = [:]
+    private var openSockets: [String: Subscription] = [:]
     
     init(session: URLSession) {
         self.session = session
@@ -41,16 +41,21 @@ final class WebTaskNode: SocketProvider {
     }
     
     
-    private func saveSubscription(_ s: URLSessionWebSocketTask.WebSocketSubscription,
-                                  for urlString: String) {
-        openSockets[urlString] = s
+    private func saveSubscription(_ s: Subscription,
+                                  for request: IRequest) {
+        urlString(from: request).do { openSockets[$0] = s }
+        
     }
     func closeSocket(request: IRequest) {
+        urlString(from: request)
+            .flatMap({ openSockets.removeValue(forKey: $0)})
+            .do({ $0.cancel() })
+    }
+    
+    private func urlString(from request: IRequest) -> String? {
         adapter.urlRequest(for: request)
             .url
             .flatMap({ $0.absoluteURL.absoluteString })
-            .flatMap({ openSockets.removeValue(forKey: $0)})
-            .do({ $0.cancel() })
     }
     
     
@@ -66,13 +71,12 @@ final class WebTaskNode: SocketProvider {
         let urlRequest = adapter.urlRequest(for: request)
     
         return session.webSocketPublisher(request: urlRequest)
-            .handleEvents(receiveSubscription: { subscription in
-                
+            .handleEvents(receiveSubscription: { [weak self] subscription in
+                self?.saveSubscription(subscription, for: request)
             })
             .eraseToAnyPublisher()
     }
-    
-   
+      
     private func task(for request: IRequest) -> URLSessionWebSocketTask {
          let urlRequest = adapter.urlRequest(for: request)
          return session.webSocketTask(with: urlRequest)
@@ -138,7 +142,7 @@ extension URLSession {
                     subscriber.receive(completion: .failure(failure))
                 }
             })
-
+            task.resume()
         }
         
         
