@@ -121,7 +121,7 @@ extension URLSession {
 
         func receive<S>(subscriber: S) where S : Subscriber, Self.Failure == S.Failure, Self.Output == S.Input {
             
-            let task = session.webSocketTask(with: urlRequest)
+            let task = urlRequest.url.map(session.webSocketTask) ?? session.webSocketTask(with: urlRequest)
     
             subscribe(subscriber: subscriber, to: task)
             keepAlive(task: task)
