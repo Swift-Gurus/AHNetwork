@@ -10,4 +10,5 @@ public protocol SocketProvider {
     func receiveSocketMessage(request: IRequest) -> AnyPublisher<String, Error>
     
     func closeSocket(request: IRequest)
+    func closeAllSockets() 
 }

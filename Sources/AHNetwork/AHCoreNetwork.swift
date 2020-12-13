@@ -1,10 +1,3 @@
-//
-//  AHCoreNetwork.swift
-//  AHFuture
-//
-//  Created by Alex Hmelevski on 2020-02-15.
-//
-
 import Foundation
 import ALResult
 import Combine
@@ -23,6 +16,9 @@ protocol AHCoreNetwork {
     @available(OSX 10.15, *)
     @available(iOS 13.0, *)
     func receiveSocketMessage(request: IRequest) -> AnyPublisher<String, Error>
+    
+    func closeAllOpenSockets()
+    func closeSocket(request: IRequest)
 }
 
 @available(OSX 10.15, *)
@@ -33,7 +29,8 @@ final class AHCoreNetworkImp: AHCoreNetwork {
     private let socketProvider: SocketProvider!
     
     @available(iOS 13.0, *)
-    init(networkProvider: INetworkProvider, socketProvider: SocketProvider) {
+    init(networkProvider: INetworkProvider,
+         socketProvider: SocketProvider) {
         provider = networkProvider
         self.socketProvider = socketProvider
     }
@@ -78,12 +75,22 @@ final class AHCoreNetworkImp: AHCoreNetwork {
     
     @available(iOS 13.0, *)
     func receiveSocketData(request: IRequest) -> AnyPublisher<Data, Error> {
-        socketProvider.receiveSocketData(request: request)
+        socketProvider.receiveSocketData(request: request).eraseToAnyPublisher()
+
     }
     
     @available(iOS 13.0, *)
     func receiveSocketMessage(request: IRequest) -> AnyPublisher<String, Error> {
         socketProvider.receiveSocketMessage(request: request)
+    }
+    
+    
+    func closeSocket(request: IRequest) {
+        socketProvider.closeSocket(request: request)
+    }
+    
+    func closeAllOpenSockets() {
+        socketProvider.closeAllSockets()
     }
 }
 
@@ -117,6 +124,10 @@ public enum CoreNetworkError: LocalizedError {
 
 @available(iOS 13.0, *)
 struct SocketPlaceHolderForLowerVersions: SocketProvider {
+    func closeAllSockets() {
+        
+    }
+    
     func receiveSocketData(request: IRequest) -> AnyPublisher<Data, Error> {
         errorFuture()
     }

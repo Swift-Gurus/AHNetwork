@@ -21,8 +21,8 @@ class DownloadTaskNode: BasicTaskNode {
         }
 
         let task = session.downloadTask(with: request.urlRequest,
-                                        completionHandler:{ (localURL, response, error) in
-            
+                                        completionHandler:{[weak self] (localURL, response, error) in
+                                            guard let self = self else {  return }
             self.downloadAdapter.response(from: localURL, with: response, and: error)
                                  »  { completion?($0) }
             

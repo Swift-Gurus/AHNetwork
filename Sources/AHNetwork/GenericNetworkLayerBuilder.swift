@@ -7,16 +7,42 @@
 
 import Foundation
 
+@available(iOS 13.0, *)
+final class SocketDelegate: NSObject, URLSessionWebSocketDelegate {
+
+    func urlSession(_ session: URLSession,
+                    webSocketTask: URLSessionWebSocketTask,
+                    didOpenWithProtocol protocol: String?) {
+        
+    }
+
+    
+    func urlSession(_ session: URLSession,
+                    webSocketTask: URLSessionWebSocketTask,
+                    didCloseWith closeCode: URLSessionWebSocketTask.CloseCode,
+                    reason: Data?) {
+        
+    }
+}
+
 @available(OSX 10.15, *)
 public class GenericNetworkLayerBuilder {
     
     public var sessionConfiguration: URLSessionConfiguration = .default
     public var dataSerializer: DataDeserializer = JSONSerializer()
-    
     public init() {}
     
     private var urlSession: URLSession {
-        return URLSession(configuration: sessionConfiguration)
+        if #available(iOS 13.0, *) {
+            return .init(configuration: sessionConfiguration)
+        } else {
+            return .init(configuration: sessionConfiguration)
+        }
+    }
+    
+    @available(iOS 13.0, *)
+    private var ahSession: AHSession {
+        .init(configuration: sessionConfiguration)
     }
     private var provider: AHNetworkProvider {
         return AHNetworkProvider(session: urlSession)
@@ -24,12 +50,13 @@ public class GenericNetworkLayerBuilder {
     
     @available(iOS 13.0, *)
     private var socketProvider: SocketProvider {
-        WebTaskNode(session: urlSession)
+        WebTaskNode(session: ahSession)
     }
     
     private var coreNetwork: AHCoreNetwork {
         if #available(iOS 13.0, *) {
-            return AHCoreNetworkImp(networkProvider: provider, socketProvider: socketProvider)
+            return AHCoreNetworkImp(networkProvider: provider,
+                                    socketProvider: socketProvider)
         } else {
             return AHCoreNetworkImp(networkProvider: provider)
         }

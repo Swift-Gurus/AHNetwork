@@ -48,7 +48,7 @@ open class GenericNetworkLayer<RequestFactory: NetworkRequestFactory> {
         let request = requestFactory.getRequest(of: type)
         return coreNetwork.send(request: request)
                           .map({ $0.data })
-                          .tryMap({ try self.serializer.convertToObject(data: $0) })
+                          .tryMap({ [serializer] in try serializer.convertToObject(data: $0) })
                           .eraseToAnyPublisher()
     }
     
@@ -56,8 +56,18 @@ open class GenericNetworkLayer<RequestFactory: NetworkRequestFactory> {
     public func listenSocketForObject<Object>(requestOfType type: RequestFactory.RequestType) -> AnyPublisher<Object, Error>  where Object: Decodable {
         let request = requestFactory.getRequest(of: type)
         return coreNetwork.receiveSocketData(request: request)
-                          .tryMap({ try self.serializer.convertToObject(data: $0) })
+                          .tryMap({  [serializer] in try serializer.convertToObject(data: $0) })
                           .eraseToAnyPublisher()
+        
+    }
+    
+    public func closeSocket(ofRequestType type: RequestFactory.RequestType) {
+        let request = requestFactory.getRequest(of: type)
+        coreNetwork.closeSocket(request: request)
+    }
+    
+    public func closeAllSockets() {
+        coreNetwork.closeAllOpenSockets()
     }
     
     @available(iOS 13.0, *)
@@ -66,5 +76,6 @@ open class GenericNetworkLayer<RequestFactory: NetworkRequestFactory> {
         return coreNetwork.receiveSocketMessage(request: request)
                           .eraseToAnyPublisher()
     }
+
 
 }
