@@ -32,6 +32,7 @@ final class SocketTaskWrapper {
     }
     
     func cancel() {
+        completions = []
         task.cancel(with: .goingAway, reason: nil)
     }
     
