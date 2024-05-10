@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import ALResult
+import AHFunctionalSwift
 @available(OSX 10.15, *)
 
 class DownloadTaskNode: BasicTaskNode {

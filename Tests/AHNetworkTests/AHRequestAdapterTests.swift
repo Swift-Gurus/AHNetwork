@@ -27,9 +27,6 @@ struct MockRequest: IRequest {
     var port: Int? = 980
 }
 
-
-
-
 class AHRequestAdapterTests: XCTestCase {
     
     func test_adapter_uses_base_url() {
@@ -77,5 +74,4 @@ class AHRequestAdapterTests: XCTestCase {
         let urlRequest = AHRequestAdapter().urlRequest(for: mockR)
         XCTAssertEqual(urlRequest.url?.absoluteURL.absoluteString, "https://www.myApi.com:980/console")
     }
-    
 }

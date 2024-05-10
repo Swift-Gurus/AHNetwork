@@ -8,8 +8,6 @@
 
 import Foundation
 
-
-
 public protocol IRequest {
     var baseURL: String { get }
     var path: String { get }

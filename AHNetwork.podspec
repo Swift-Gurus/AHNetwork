@@ -22,8 +22,7 @@ s.swift_version = '5.0'
 
 s.source_files = 'Sources/**/*'
 
-s.dependency 'ALEither'
-s.dependency 'EitherResult'
+s.dependency 'AHFunctionalSwift'
 
 end
 

@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import ALResult
+import AHFunctionalSwift
 import Combine
 
 @available(OSX 10.15, *)

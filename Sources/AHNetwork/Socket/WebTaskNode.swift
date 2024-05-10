@@ -1,6 +1,6 @@
 import Foundation
 import Combine
-import ALResult
+import AHFunctionalSwift
 
 @available(iOS 13.0, *)
 @available(OSX 10.15, *)

@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import ALResult
+import AHFunctionalSwift
 
 protocol INetworkResponseAdapter {
     

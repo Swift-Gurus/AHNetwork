@@ -6,7 +6,7 @@
 //
 
 import Foundation
-import ALResult
+import AHFunctionalSwift
 import Combine
 
 public protocol NetworkRequestFactory {

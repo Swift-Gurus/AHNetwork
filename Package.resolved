@@ -2,12 +2,12 @@
   "object": {
     "pins": [
       {
-        "package": "ALResult",
-        "repositoryURL": "https://github.com/Swift-Gurus/ALResult.git",
+        "package": "AHFunctionalSwift",
+        "repositoryURL": "https://github.com/Swift-Gurus/FunctionalSwift.git",
         "state": {
           "branch": null,
-          "revision": "c3a5383bc7505fa872d8340ebb603aa03bfb6d4d",
-          "version": "0.2.0"
+          "revision": "745ca576a5e64b9cb3d8e7ff2b52321a30cc4a7b",
+          "version": "0.2.6"
         }
       }
     ]
