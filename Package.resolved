@@ -1,16 +1,14 @@
 {
-  "object": {
-    "pins": [
-      {
-        "package": "ALResult",
-        "repositoryURL": "https://github.com/Swift-Gurus/ALResult.git",
-        "state": {
-          "branch": null,
-          "revision": "c3a5383bc7505fa872d8340ebb603aa03bfb6d4d",
-          "version": "0.2.0"
-        }
+  "pins" : [
+    {
+      "identity" : "functionalswift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Swift-Gurus/FunctionalSwift.git",
+      "state" : {
+        "branch" : "master",
+        "revision" : "b27982eda1fbe174f3d4983b937797226e116896"
       }
-    ]
-  },
-  "version": 1
+    }
+  ],
+  "version" : 2
 }

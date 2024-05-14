@@ -8,6 +8,7 @@
 
 import XCTest
 @testable import AHNetwork
+import FunctionalSwift
 
 struct MockRequest: IRequest {
     var baseURL: String =   "www.myApi.com"
@@ -26,9 +27,6 @@ struct MockRequest: IRequest {
     var taskType: AHTaskType = .request
     var port: Int? = 980
 }
-
-
-
 
 class AHRequestAdapterTests: XCTestCase {
     
@@ -77,5 +75,4 @@ class AHRequestAdapterTests: XCTestCase {
         let urlRequest = AHRequestAdapter().urlRequest(for: mockR)
         XCTAssertEqual(urlRequest.url?.absoluteURL.absoluteString, "https://www.myApi.com:980/console")
     }
-    
 }

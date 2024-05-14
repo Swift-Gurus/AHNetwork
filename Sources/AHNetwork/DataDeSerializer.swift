@@ -15,7 +15,6 @@ public protocol DataSerializer {
     func convertToData<T: Encodable>(_ obj: T) throws -> Data
 }
 
-
 public final class JSONSerializer: DataSerializer, DataDeserializer {
     private let encoder = JSONEncoder()
     private let decoder = JSONDecoder()

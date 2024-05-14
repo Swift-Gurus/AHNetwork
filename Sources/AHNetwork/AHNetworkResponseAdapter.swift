@@ -7,7 +7,11 @@
 //
 
 import Foundation
-import ALResult
+#if canImport(FunctionalSwift)
+import FunctionalSwift
+#else
+import AHFunctionalSwift
+#endif
 
 protocol INetworkResponseAdapter {
     

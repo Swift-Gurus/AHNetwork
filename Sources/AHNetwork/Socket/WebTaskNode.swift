@@ -1,6 +1,10 @@
 import Foundation
 import Combine
-import ALResult
+#if canImport(FunctionalSwift)
+import FunctionalSwift
+#else
+import AHFunctionalSwift
+#endif
 
 @available(iOS 13.0, *)
 @available(OSX 10.15, *)

@@ -6,7 +6,11 @@
 //
 
 import Foundation
-import ALResult
+#if canImport(FunctionalSwift)
+import FunctionalSwift
+#else
+import AHFunctionalSwift
+#endif
 @available(OSX 10.15, *)
 
 class DownloadTaskNode: BasicTaskNode {

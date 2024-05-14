@@ -1,5 +1,11 @@
 import Foundation
-import ALResult
+
+#if canImport(FunctionalSwift)
+import FunctionalSwift
+#else
+import AHFunctionalSwift
+#endif
+
 import Combine
 
 
@@ -23,7 +29,6 @@ protocol AHCoreNetwork {
 
 @available(OSX 10.15, *)
 final class AHCoreNetworkImp: AHCoreNetwork {
-    
 
     private let provider: INetworkProvider
     private let socketProvider: SocketProvider!
