@@ -7,7 +7,11 @@
 //
 
 import Foundation
+#if canImport(FunctionalSwift)
+import FunctionalSwift
+#else
 import AHFunctionalSwift
+#endif
 
 protocol IRequestAdapter {
     func urlRequest(for request: IRequest) -> URLRequest

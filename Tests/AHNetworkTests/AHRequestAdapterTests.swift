@@ -8,6 +8,7 @@
 
 import XCTest
 @testable import AHNetwork
+import FunctionalSwift
 
 struct MockRequest: IRequest {
     var baseURL: String =   "www.myApi.com"

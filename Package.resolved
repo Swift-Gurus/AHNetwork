@@ -1,16 +1,14 @@
 {
-  "object": {
-    "pins": [
-      {
-        "package": "AHFunctionalSwift",
-        "repositoryURL": "https://github.com/Swift-Gurus/FunctionalSwift.git",
-        "state": {
-          "branch": null,
-          "revision": "745ca576a5e64b9cb3d8e7ff2b52321a30cc4a7b",
-          "version": "0.2.6"
-        }
+  "pins" : [
+    {
+      "identity" : "functionalswift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Swift-Gurus/FunctionalSwift.git",
+      "state" : {
+        "branch" : "master",
+        "revision" : "b27982eda1fbe174f3d4983b937797226e116896"
       }
-    ]
-  },
-  "version": 1
+    }
+  ],
+  "version" : 2
 }
